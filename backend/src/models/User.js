@@ -12,23 +12,18 @@ class User extends Model {
         email: {
           type: DataTypes.STRING,
           allowNull: false,
+          unique: true,
           validate: { isEmail: true },
         },
-        phone: {
+        role: {
           type: DataTypes.STRING,
+          defaultValue: "user",
         },
-        company: {
-          type: DataTypes.STRING,
-        },
-        street: { type: DataTypes.STRING },
-        city: { type: DataTypes.STRING },
-        zip: { type: DataTypes.STRING },
-        lat: { type: DataTypes.FLOAT },
-        lng: { type: DataTypes.FLOAT },
       },
       {
         sequelize,
         modelName: "User",
+        tableName: "users",
       }
     );
   }

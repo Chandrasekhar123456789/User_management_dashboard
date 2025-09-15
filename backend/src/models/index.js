@@ -1,5 +1,3 @@
-
-// backend/src/models/index.js
 const { Sequelize } = require("sequelize");
 
 // Use DATABASE_URL from environment if provided (Render/Postgres)
@@ -25,3 +23,4 @@ module.exports = {
   sequelize,
   User,
 };
+
