@@ -1,26 +1,33 @@
 const { Sequelize } = require("sequelize");
 
-// Use DATABASE_URL from environment if provided (Render/Postgres)
-// Otherwise default to SQLite (local development)
-const sequelize = new Sequelize(
-  process.env.DATABASE_URL || {
+let sequelize;
+
+if (process.env.DATABASE_URL) {
+  // Use Postgres on Render
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: "postgres",
+    protocol: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // Render Postgres needs this
+      },
+    },
+    logging: false,
+  });
+} else {
+  // Use SQLite locally
+  sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "./database.sqlite",
-  },
-  {
-    logging: false, // disable SQL logs in console
-  }
-);
+    logging: false,
+  });
+}
 
-// Import the User model
+// Import model
 const User = require("./User");
-
-// Initialize the model with Sequelize instance
 User.initModel(sequelize);
 
-// Export everything
-module.exports = {
-  sequelize,
-  User,
-};
+module.exports = { sequelize, User };
+
 
