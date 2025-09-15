@@ -1,23 +1,37 @@
-const mongoose = require('mongoose');
+// backend/src/models/User.js
+const { DataTypes, Model } = require("sequelize");
 
-const GeoSchema = new mongoose.Schema({
-  lat: { type: String, default: '' },
-  lng: { type: String, default: '' }
-}, { _id: false });
+class User extends Model {
+  static initModel(sequelize) {
+    User.init(
+      {
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: { isEmail: true },
+        },
+        phone: {
+          type: DataTypes.STRING,
+        },
+        company: {
+          type: DataTypes.STRING,
+        },
+        street: { type: DataTypes.STRING },
+        city: { type: DataTypes.STRING },
+        zip: { type: DataTypes.STRING },
+        lat: { type: DataTypes.FLOAT },
+        lng: { type: DataTypes.FLOAT },
+      },
+      {
+        sequelize,
+        modelName: "User",
+      }
+    );
+  }
+}
 
-const AddressSchema = new mongoose.Schema({
-  street: { type: String, default: '' },
-  city: { type: String, default: '' },
-  zipcode: { type: String, default: '' },
-  geo: { type: GeoSchema, default: () => ({}) }
-}, { _id: false });
-
-const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  email: { type: String, required: true, trim: true },
-  phone: { type: String, trim: true },
-  company: { type: String, trim: true, default: '' },
-  address: { type: AddressSchema, default: () => ({}) }
-}, { timestamps: true });
-
-module.exports = mongoose.model('User', UserSchema);
+module.exports = User;
