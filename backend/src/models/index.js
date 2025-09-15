@@ -17,6 +17,7 @@ if (dialect === 'sqlite') {
   });
 }
 
-const User = require('./user')(sequelize);
+const User = require("./User");
+(sequelize);
 
 module.exports = { sequelize, User };
